@@ -1,91 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Marker animations with <code>setTimeout()</code></title>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
+<head>
+  <meta charset="utf-8">
+  <title>Marker animations with <code>setTimeout()</code></title>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #floating-panel {
+      position: absolute;
+      top: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+      padding-left: 10px;
+    }
+    #floating-panel {
+      margin-left: -52px;
+    }
+  </style>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR8VxwvktGHrVusPmbTexG9pxnqFBrFe8&callback=initMap">
+</script>
+</head>
+<body onload="drop()">
+  <div id="map"></div>
+  <script>
+    
+    // If you're adding a number of markers, you may want to drop them on the map
+    // consecutively rather than all at once. This example shows how to use
+    // window.setTimeout() to space your markers' animation.
+    var loc_names = [ 'MBD Wadi Kabir',
+                      'BOWSHER Center',
+                      'AL KHUWAIR',
+                      'AZAIBA SEEB'
+                      ];
+    
+    var neighborhoods = [
+    {lat: 23.5945, lng: 58.5496}, //amarja jog
+    {lat: 23.5827, lng: 58.4095}, //umesh & swati bhide
+    {lat: 23.5962, lng: 58.4231}, //girish & amodi garde
+    {lat: 23.5998, lng: 58.3539} //milind & supriya kulkarni
+    ];
+    
+    var markers = [];
+    var map;
+    
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: {lat: 23.5859, lng: 58.406}
+      });
+    }
+    
+    function drop() {
+      //clearMarkers();
+      for (var i = 0; i < neighborhoods.length; i++) {
+        addMarkerWithTimeout(neighborhoods[i], loc_names[i], i * 200);
       }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-      #floating-panel {
-        margin-left: -52px;
-      }
-    </style>
-  </head>
-  <body onload="drop()">
-    <div id="map"></div>
-    <script>
+    }
 
-      // If you're adding a number of markers, you may want to drop them on the map
-      // consecutively rather than all at once. This example shows how to use
-      // window.setTimeout() to space your markers' animation.
-      var loc_name = 'ABCD';
-
-      var neighborhoods = [
-        {lat: 23.5945, lng: 58.5496}, //amarja jog
-        {lat: 23.5827, lng: 58.4095}, //umesh & swati bhide
-        {lat: 23.5962, lng: 58.4231}, //girish & amodi garde
-        {lat: 23.5998, lng: 58.3539} //milind & supriya kulkarni
-      ];
-
-      var markers = [];
-      var map;
-
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: {lat: 23.5859, lng: 58.406}
-        });
-      }
-
-      function drop() {
-        clearMarkers();
-        for (var i = 0; i < neighborhoods.length; i++) {
-          addMarkerWithTimeout(neighborhoods[i], i * 200);
-        }
-      }
-
-      function addMarkerWithTimeout(position, timeout) {
-        window.setTimeout(function() {
-          markers.push(new google.maps.Marker({
-            position: position,
-            map: map,
+    // var infowindow =  new google.maps.InfoWindow({
+    //   content: ''
+    // });
+    
+    function addMarkerWithTimeout(position, loc_name, timeout) {
+      window.setTimeout(function() {
+        // markers.push(new google.maps.Marker({
+          //   position: position,
+          //   map: map,
+          //   // title: loc_name,
+          //   animation: google.maps.Animation.DROP
+          // }));
+          var marker = new google.maps.Marker({
             title: loc_name,
+            position: new google.maps.LatLng(position),
+            map: map,
             animation: google.maps.Animation.DROP
-          }));
+          });
         }, timeout);
       }
-
-      function clearMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers = [];
-      }
+      
+      // function clearMarkers() {
+      //   for (var i = 0; i < markers.length; i++) {
+      //     markers[i].setMap(null);
+      //   }
+      //   markers = [];
+      // }
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR8VxwvktGHrVusPmbTexG9pxnqFBrFe8&callback=initMap">
-    </script>
-  </body>
+</body>
 </html>
